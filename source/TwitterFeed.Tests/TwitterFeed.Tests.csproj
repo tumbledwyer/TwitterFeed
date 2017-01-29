@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="TwitterAppTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
