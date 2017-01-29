@@ -68,6 +68,55 @@ namespace TwitterFeed.Tests
             });
         }
 
+        [Test]
+        public void Run_GivenTwoUsersAndOneTweet_ShouldLogUsersAlphabeticallyAndTweetWithCorrectUser()
+        {
+            //---------------Set up test pack-------------------
+            var userFile = GetTestFile("TwoUsers.txt");
+            var tweetFile = GetTestFile("OneTweet.txt");
+            var expectedUser1 = "Steve";
+            var expectedUser2 = "Xander";
+            var expectedTweet = "\t@Steve: I have a twitter account";
+
+            var logger = CreateLogger();
+
+            var twitterApp = CreateTwitterApp(logger);
+            //---------------Execute Test ----------------------
+            twitterApp.Run(userFile, tweetFile);
+            //---------------Test Result -----------------------
+            Received.InOrder(() =>
+            {
+                logger.Log(expectedUser1);
+                logger.Log(expectedTweet);
+                logger.Log(expectedUser2);
+            });
+        }
+
+        [Test]
+        public void Run_GivenOneTweetAndAUserWithAFollower_ShouldLogTweetForBothUsers()
+        {
+            //---------------Set up test pack-------------------
+            var userFile = GetTestFile("TwoUsersWithFollower.txt");
+            var tweetFile = GetTestFile("OneTweet.txt");
+            var expectedUser1 = "Steve";
+            var expectedUser2 = "Xander";
+            var expectedTweet = "\t@Steve: I have a twitter account";
+
+            var logger = CreateLogger();
+
+            var twitterApp = CreateTwitterApp(logger);
+            //---------------Execute Test ----------------------
+            twitterApp.Run(userFile, tweetFile);
+            //---------------Test Result -----------------------
+            Received.InOrder(() =>
+            {
+                logger.Log(expectedUser1);
+                logger.Log(expectedTweet);
+                logger.Log(expectedUser2);
+                logger.Log(expectedTweet);
+            });
+        }
+
         private static TwitterApp CreateTwitterApp()
         {
             var logger = CreateLogger();

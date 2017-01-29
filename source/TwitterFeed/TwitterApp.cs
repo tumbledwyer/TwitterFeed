@@ -23,17 +23,22 @@ namespace TwitterFeed
             }
 
             var users = new List<string>();
-            var userLines = File.ReadAllLines(filePaths[0]).ToList();
+            var userLines = File.ReadAllLines(filePaths[0]).OrderBy(s => s).ToList();
             userLines.ForEach(s => users.AddRange(s.Split(new [] {" follows"}, StringSplitOptions.RemoveEmptyEntries)));
 
             var tweetLines = File.ReadAllLines(filePaths[1]);
             var tweets = tweetLines.Select(CreateTweet).ToList();
-
-
-            users.ForEach(s => _logger.Log(s));
-            tweets.ForEach(t => _logger.Log(t));
-
-
+            
+            users.ForEach(s =>
+            {
+                _logger.Log(s);
+                tweets.ForEach(t =>
+                {
+                    if (t.StartsWith($"\t@{s}"))
+                        _logger.Log(t);
+                });
+            });
+            
         }
 
         private string CreateTweet(string tweetLine)

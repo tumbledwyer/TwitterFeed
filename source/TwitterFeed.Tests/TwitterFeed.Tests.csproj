@@ -61,6 +61,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\TwoUsersWithFollower.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TwoUsers.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\OneTweet.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
