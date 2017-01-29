@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NSubstitute;
 using NUnit.Framework;
@@ -114,6 +115,38 @@ namespace TwitterFeed.Tests
                 logger.Log(expectedTweet);
                 logger.Log(expectedUser2);
                 logger.Log(expectedTweet);
+            });
+        }
+
+        [Test]
+        public void Run_GivenMultipleTweetsAndFollowers_ShouldAllInOrder()
+        {
+            //---------------Set up test pack-------------------
+            var userFile = GetTestFile("SampleUsers.txt");
+            var tweetFile = GetTestFile("SampleTweets.txt");
+            var expectedUser1 = "Alan";
+            var expectedUser2 = "Martin";
+            var expectedUser3 = "Ward";
+            var expectedTweet1 = "\t@Alan: If you have a procedure with 10 parameters, you probably missed some.";
+            var expectedTweet2 = "\t@Ward: There are only two hard things in Computer Science: cache invalidation, naming things and off-by-1 errors.";
+            var expectedTweet3 = "\t@Alan: Random numbers should not be generated with a method chosen at random.";
+
+            var logger = CreateLogger();
+
+            var twitterApp = CreateTwitterApp(logger);
+            //---------------Execute Test ----------------------
+            twitterApp.Run(userFile, tweetFile);
+            //---------------Test Result -----------------------
+            Received.InOrder(() =>
+            {
+                logger.Log(expectedUser1);
+                logger.Log(expectedTweet1);
+                logger.Log(expectedTweet3);
+                logger.Log(expectedUser2);
+                logger.Log(expectedUser3);
+                logger.Log(expectedTweet1);
+                logger.Log(expectedTweet2);
+                logger.Log(expectedTweet3);
             });
         }
 
