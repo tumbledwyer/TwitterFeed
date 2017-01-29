@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TwitterFeed.Output;
@@ -7,13 +8,15 @@ namespace TwitterFeed
 {
     public class TwitterApp
     {
-        private readonly ILogger _logger;
+        private readonly ITweetPresenter _tweetPresenter;
         private readonly UserParser _userParser;
+        private readonly TweetParser _tweetParser;
 
-        public TwitterApp(ILogger logger)
+        public TwitterApp(ITweetPresenter tweetPresenter)
         {
-            _logger = logger;
+            _tweetPresenter = tweetPresenter;
             _userParser = new UserParser();
+            _tweetParser = new TweetParser();
         }
 
         public void Run(params string[] filePaths)
@@ -28,18 +31,18 @@ namespace TwitterFeed
             var users = _userParser.GetUsers(userLines);
 
             var tweetLines = File.ReadLines(filePaths[1]);
-            var tweets = tweetLines.Select(CreateTweet).ToList();
+            var tweets = _tweetParser.GetTweets(tweetLines);
             
             users.OrderBy(user => user.Name).ToList()
                 .ForEach(u =>
             {
-                _logger.Log(u.Name);
+                _tweetPresenter.Render(u.Name);
                 tweets.Where(ShouldShowTweet(u)).ToList()
-                    .ForEach(t => _logger.Log(FormatTweet(t)));
+                    .ForEach(t => _tweetPresenter.Render(FormatTweet(t)));
             });
         }
 
-        private static Func<Tweet, bool> ShouldShowTweet(User u)
+        private Func<Tweet, bool> ShouldShowTweet(User u)
         {
             return t =>TweetIsForUser(t, u) || u.Following.Any(f => TweetIsForUser(t, f));
         }
@@ -49,21 +52,9 @@ namespace TwitterFeed
             return $"\t@{tweet.Author}: {tweet.Text}";
         }
 
-        private static bool TweetIsForUser(Tweet tweet, User user)
+        private bool TweetIsForUser(Tweet tweet, User user)
         {
             return tweet.Author == user.Name;
         }
-
-        private Tweet CreateTweet(string tweetLine)
-        {
-            var parts = tweetLine.Split(new [] {"> "}, StringSplitOptions.RemoveEmptyEntries);
-            return new Tweet {Author = parts[0], Text = parts[1]};
-        }
-    }
-
-    public class Tweet
-    {
-        public string Author { get; set; }
-        public string Text { get; set; }
     }
 }

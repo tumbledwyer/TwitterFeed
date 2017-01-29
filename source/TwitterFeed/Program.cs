@@ -9,7 +9,7 @@ namespace TwitterFeed
         {
             try
             {
-                var twitterApp = new TwitterApp(new ConsoleLogger());
+                var twitterApp = new TwitterApp(new ConsoleTweetPresenter());
                 twitterApp.Run(args);
             }
             catch (Exception exception)

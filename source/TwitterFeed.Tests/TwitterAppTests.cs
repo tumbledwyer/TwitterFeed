@@ -44,7 +44,7 @@ namespace TwitterFeed.Tests
             //---------------Execute Test ----------------------
             twitterApp.Run(userFile, tweetFile);
             //---------------Test Result -----------------------
-            logger.Received(1).Log(expected);
+            logger.Received(1).Render(expected);
         }
 
         [Test]
@@ -64,8 +64,8 @@ namespace TwitterFeed.Tests
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                logger.Log(expectedUser);
-                logger.Log(expectedTweet);
+                logger.Render(expectedUser);
+                logger.Render(expectedTweet);
             });
         }
 
@@ -87,9 +87,9 @@ namespace TwitterFeed.Tests
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                logger.Log(expectedUser1);
-                logger.Log(expectedTweet);
-                logger.Log(expectedUser2);
+                logger.Render(expectedUser1);
+                logger.Render(expectedTweet);
+                logger.Render(expectedUser2);
             });
         }
 
@@ -111,10 +111,10 @@ namespace TwitterFeed.Tests
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                logger.Log(expectedUser1);
-                logger.Log(expectedTweet);
-                logger.Log(expectedUser2);
-                logger.Log(expectedTweet);
+                logger.Render(expectedUser1);
+                logger.Render(expectedTweet);
+                logger.Render(expectedUser2);
+                logger.Render(expectedTweet);
             });
         }
 
@@ -139,14 +139,14 @@ namespace TwitterFeed.Tests
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                logger.Log(expectedUser1);
-                logger.Log(expectedTweet1);
-                logger.Log(expectedTweet3);
-                logger.Log(expectedUser2);
-                logger.Log(expectedUser3);
-                logger.Log(expectedTweet1);
-                logger.Log(expectedTweet2);
-                logger.Log(expectedTweet3);
+                logger.Render(expectedUser1);
+                logger.Render(expectedTweet1);
+                logger.Render(expectedTweet3);
+                logger.Render(expectedUser2);
+                logger.Render(expectedUser3);
+                logger.Render(expectedTweet1);
+                logger.Render(expectedTweet2);
+                logger.Render(expectedTweet3);
             });
         }
 
@@ -156,9 +156,9 @@ namespace TwitterFeed.Tests
             return CreateTwitterApp(logger);
         }
 
-        private static TwitterApp CreateTwitterApp(ILogger logger)
+        private static TwitterApp CreateTwitterApp(ITweetPresenter tweetPresenter)
         {
-            return new TwitterApp(logger);
+            return new TwitterApp(tweetPresenter);
         }
 
         private static string GetTestFile(string testFile)
@@ -167,9 +167,9 @@ namespace TwitterFeed.Tests
             return Path.Combine(testDirectory, "TestData", testFile);
         }
 
-        private static ILogger CreateLogger()
+        private static ITweetPresenter CreateLogger()
         {
-            return Substitute.For<ILogger>();
+            return Substitute.For<ITweetPresenter>();
         }
     }
 }

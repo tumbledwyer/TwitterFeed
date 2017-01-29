@@ -2,9 +2,9 @@ using System;
 
 namespace TwitterFeed.Output
 {
-    public class ConsoleLogger : ILogger
+    public class ConsoleTweetPresenter : ITweetPresenter
     {
-        public void Log(string message)
+        public void Render(string message)
         {
             Console.WriteLine(message);
         }
