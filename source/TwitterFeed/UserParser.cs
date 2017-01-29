@@ -6,24 +6,37 @@ namespace TwitterFeed
 {
     public class UserParser
     {
-        public List<User> CreateUsers(List<string> userLines)
+        public List<User> GetUsers(List<string> userLines)
         {
             var users = new List<User>();
-            userLines.ForEach(s =>
+            userLines.ForEach(line =>
             {
-                var userNames = s.Split(new[] {" follows"}, StringSplitOptions.RemoveEmptyEntries);
-                var primary = userNames[0];
-                var followers = userNames.Skip(1).ToList();
-                var user = users.FirstOrDefault(u => u.Name == primary) ?? CreateNewUser(primary);
-                followers.ForEach(f =>
-                {
-                    var followee = users.FirstOrDefault(u => u.Name == f.Trim()) ?? CreateNewUser(f);
-                    AddUser(user.Following, followee);
-                    AddUser(users, followee);
-                });
-                AddUser(users, user);
+                CreateUsers(line, users);
             });
             return users;
+        }
+
+        private void CreateUsers(string line, List<User> users)
+        {
+            var userNames = GetUserNames(line);
+            var primary = userNames.First();
+            var followees = userNames.Skip(1).ToList();
+
+            var user = users.FirstOrDefault(u => u.Name == primary) ?? CreateNewUser(primary);
+            AddUser(users, user);
+
+            followees.ForEach(f =>
+            {
+                var followee = users.FirstOrDefault(u => u.Name == f) ?? CreateNewUser(f);
+                AddUser(user.Following, followee);
+                AddUser(users, followee);
+            });
+        }
+
+        private static IEnumerable<string> GetUserNames(string input)
+        {
+            return input.Split(new[] {"follows", ","}, StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Trim());
         }
 
         private static void AddUser(List<User> users, User user)

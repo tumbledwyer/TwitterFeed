@@ -25,7 +25,7 @@ namespace TwitterFeed
 
             var userLines = File.ReadLines(filePaths[0]).OrderBy(s => s).ToList();
 
-            var users = _userParser.CreateUsers(userLines);
+            var users = _userParser.GetUsers(userLines);
 
             var tweetLines = File.ReadLines(filePaths[1]);
             var tweets = tweetLines.Select(CreateTweet).ToList();
