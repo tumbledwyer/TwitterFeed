@@ -2,6 +2,7 @@
 using System.IO;
 using NSubstitute;
 using NUnit.Framework;
+using TwitterFeed.Output;
 
 namespace TwitterFeed.Tests
 {
@@ -43,6 +44,28 @@ namespace TwitterFeed.Tests
             twitterApp.Run(userFile, tweetFile);
             //---------------Test Result -----------------------
             logger.Received(1).Log(expected);
+        }
+
+        [Test]
+        public void Run_GivenOneUserAndOneTweet_ShouldLogNameAndTweet()
+        {
+            //---------------Set up test pack-------------------
+            var userFile = GetTestFile("OneUser.txt");
+            var tweetFile = GetTestFile("OneTweet.txt");
+            var expectedUser = "Steve";
+            var expectedTweet = "\t@Steve: I have a twitter account";
+
+            var logger = CreateLogger();
+
+            var twitterApp = CreateTwitterApp(logger);
+            //---------------Execute Test ----------------------
+            twitterApp.Run(userFile, tweetFile);
+            //---------------Test Result -----------------------
+            Received.InOrder(() =>
+            {
+                logger.Log(expectedUser);
+                logger.Log(expectedTweet);
+            });
         }
 
         private static TwitterApp CreateTwitterApp()

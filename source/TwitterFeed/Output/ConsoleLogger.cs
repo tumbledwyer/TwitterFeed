@@ -1,6 +1,6 @@
 using System;
 
-namespace TwitterFeed
+namespace TwitterFeed.Output
 {
     public class ConsoleLogger : ILogger
     {

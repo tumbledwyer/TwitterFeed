@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TwitterFeed.Output;
 
 namespace TwitterFeed
 {
@@ -20,10 +21,25 @@ namespace TwitterFeed
             {
                 throw new ArgumentException("Method requires 2 file paths");
             }
-            var readAllLines = File.ReadAllLines(filePaths[0]).ToList();
+
             var users = new List<string>();
-            readAllLines.ForEach(s => users.AddRange(s.Split(" follows".ToArray(), StringSplitOptions.RemoveEmptyEntries)));
+            var userLines = File.ReadAllLines(filePaths[0]).ToList();
+            userLines.ForEach(s => users.AddRange(s.Split(new [] {" follows"}, StringSplitOptions.RemoveEmptyEntries)));
+
+            var tweetLines = File.ReadAllLines(filePaths[1]);
+            var tweets = tweetLines.Select(CreateTweet).ToList();
+
+
             users.ForEach(s => _logger.Log(s));
+            tweets.ForEach(t => _logger.Log(t));
+
+
+        }
+
+        private string CreateTweet(string tweetLine)
+        {
+            var strings = tweetLine.Split(new [] {"> "}, StringSplitOptions.RemoveEmptyEntries);
+            return $"\t@{strings[0]}: {strings[1]}";
         }
     }
 }

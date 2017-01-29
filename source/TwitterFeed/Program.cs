@@ -1,4 +1,5 @@
 ﻿using System;
+using TwitterFeed.Output;
 
 namespace TwitterFeed
 {
