@@ -23,34 +23,47 @@ namespace TwitterFeed
                 throw new ArgumentException("Method requires 2 file paths");
             }
 
-            var userLines = File.ReadLines(filePaths[0]).OrderBy(s => s).ToList();
+            var userLines = File.ReadLines(filePaths[0]).ToList();
 
             var users = _userParser.GetUsers(userLines);
 
             var tweetLines = File.ReadLines(filePaths[1]);
             var tweets = tweetLines.Select(CreateTweet).ToList();
             
-            users.ForEach(u =>
+            users.OrderBy(user => user.Name).ToList()
+                .ForEach(u =>
             {
                 _logger.Log(u.Name);
-                tweets.ForEach(t =>
-                {
-                    if (t.StartsWith($"\t@{u.Name}"))
-                        _logger.Log(t);
-                    u.Following.ForEach(f =>
-                    {
-                        if (t.StartsWith($"\t@{f.Name}"))
-                            _logger.Log(t);
-                    });
-                });
+                tweets.Where(ShouldShowTweet(u)).ToList()
+                    .ForEach(t => _logger.Log(FormatTweet(t)));
             });
-            
         }
 
-        private string CreateTweet(string tweetLine)
+        private static Func<Tweet, bool> ShouldShowTweet(User u)
         {
-            var strings = tweetLine.Split(new [] {"> "}, StringSplitOptions.RemoveEmptyEntries);
-            return $"\t@{strings[0]}: {strings[1]}";
+            return t =>TweetIsForUser(t, u) || u.Following.Any(f => TweetIsForUser(t, f));
         }
+
+        private string FormatTweet(Tweet tweet)
+        {
+            return $"\t@{tweet.Author}: {tweet.Text}";
+        }
+
+        private static bool TweetIsForUser(Tweet tweet, User user)
+        {
+            return tweet.Author == user.Name;
+        }
+
+        private Tweet CreateTweet(string tweetLine)
+        {
+            var parts = tweetLine.Split(new [] {"> "}, StringSplitOptions.RemoveEmptyEntries);
+            return new Tweet {Author = parts[0], Text = parts[1]};
+        }
+    }
+
+    public class Tweet
+    {
+        public string Author { get; set; }
+        public string Text { get; set; }
     }
 }
