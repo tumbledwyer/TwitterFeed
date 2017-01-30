@@ -31,24 +31,24 @@ namespace TwitterFeed.Tests
         }
 
         [Test]
-        public void Run_GivenOneUserAndZeroTweets_ShouldLogName()
+        public void Run_GivenOneUserAndZeroTweets_ShouldRenderName()
         {
             //---------------Set up test pack-------------------
             var userFile = GetTestFile("OneUser.txt");
             var tweetFile = GetTestFile("EmptyTweets.txt");
             var expected = "Steve";
 
-            var logger = CreateLogger();
+            var presenter = CreatePresenter();
 
-            var twitterApp = CreateTwitterApp(logger);
+            var twitterApp = CreateTwitterApp(presenter);
             //---------------Execute Test ----------------------
             twitterApp.Run(userFile, tweetFile);
             //---------------Test Result -----------------------
-            logger.Received(1).Render(expected);
+            presenter.Received(1).Render(expected);
         }
 
         [Test]
-        public void Run_GivenOneUserAndOneTweet_ShouldLogNameAndTweet()
+        public void Run_GivenOneUserAndOneTweet_ShouldRenderNameAndTweet()
         {
             //---------------Set up test pack-------------------
             var userFile = GetTestFile("OneUser.txt");
@@ -56,21 +56,21 @@ namespace TwitterFeed.Tests
             var expectedUser = "Steve";
             var expectedTweet = "\t@Steve: I have a twitter account";
 
-            var logger = CreateLogger();
+            var presenter = CreatePresenter();
 
-            var twitterApp = CreateTwitterApp(logger);
+            var twitterApp = CreateTwitterApp(presenter);
             //---------------Execute Test ----------------------
             twitterApp.Run(userFile, tweetFile);
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                logger.Render(expectedUser);
-                logger.Render(expectedTweet);
+                presenter.Render(expectedUser);
+                presenter.Render(expectedTweet);
             });
         }
 
         [Test]
-        public void Run_GivenTwoUsersAndOneTweet_ShouldLogUsersAlphabeticallyAndTweetWithCorrectUser()
+        public void Run_GivenTwoUsersAndOneTweet_ShouldRenderUsersAlphabeticallyAndTweetWithCorrectUser()
         {
             //---------------Set up test pack-------------------
             var userFile = GetTestFile("TwoUsers.txt");
@@ -79,22 +79,22 @@ namespace TwitterFeed.Tests
             var expectedUser2 = "Xander";
             var expectedTweet = "\t@Steve: I have a twitter account";
 
-            var logger = CreateLogger();
+            var presenter = CreatePresenter();
 
-            var twitterApp = CreateTwitterApp(logger);
+            var twitterApp = CreateTwitterApp(presenter);
             //---------------Execute Test ----------------------
             twitterApp.Run(userFile, tweetFile);
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                logger.Render(expectedUser1);
-                logger.Render(expectedTweet);
-                logger.Render(expectedUser2);
+                presenter.Render(expectedUser1);
+                presenter.Render(expectedTweet);
+                presenter.Render(expectedUser2);
             });
         }
 
         [Test]
-        public void Run_GivenOneTweetAndAUserWithAFollower_ShouldLogTweetForBothUsers()
+        public void Run_GivenOneTweetAndAUserWithAFollower_ShouldRenderTweetForBothUsers()
         {
             //---------------Set up test pack-------------------
             var userFile = GetTestFile("TwoUsersWithFollower.txt");
@@ -103,23 +103,23 @@ namespace TwitterFeed.Tests
             var expectedUser2 = "Xander";
             var expectedTweet = "\t@Steve: I have a twitter account";
 
-            var logger = CreateLogger();
+            var presenter = CreatePresenter();
 
-            var twitterApp = CreateTwitterApp(logger);
+            var twitterApp = CreateTwitterApp(presenter);
             //---------------Execute Test ----------------------
             twitterApp.Run(userFile, tweetFile);
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                logger.Render(expectedUser1);
-                logger.Render(expectedTweet);
-                logger.Render(expectedUser2);
-                logger.Render(expectedTweet);
+                presenter.Render(expectedUser1);
+                presenter.Render(expectedTweet);
+                presenter.Render(expectedUser2);
+                presenter.Render(expectedTweet);
             });
         }
 
         [Test]
-        public void Run_GivenMultipleTweetsAndFollowers_ShouldAllInOrder()
+        public void Run_GivenMultipleTweetsAndFollowers_ShouldRenderAllInOrder()
         {
             //---------------Set up test pack-------------------
             var userFile = GetTestFile("SampleUsers.txt");
@@ -131,28 +131,28 @@ namespace TwitterFeed.Tests
             var expectedTweet2 = "\t@Ward: There are only two hard things in Computer Science: cache invalidation, naming things and off-by-1 errors.";
             var expectedTweet3 = "\t@Alan: Random numbers should not be generated with a method chosen at random.";
 
-            var logger = CreateLogger();
+            var presenter = CreatePresenter();
 
-            var twitterApp = CreateTwitterApp(logger);
+            var twitterApp = CreateTwitterApp(presenter);
             //---------------Execute Test ----------------------
             twitterApp.Run(userFile, tweetFile);
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                logger.Render(expectedUser1);
-                logger.Render(expectedTweet1);
-                logger.Render(expectedTweet3);
-                logger.Render(expectedUser2);
-                logger.Render(expectedUser3);
-                logger.Render(expectedTweet1);
-                logger.Render(expectedTweet2);
-                logger.Render(expectedTweet3);
+                presenter.Render(expectedUser1);
+                presenter.Render(expectedTweet1);
+                presenter.Render(expectedTweet3);
+                presenter.Render(expectedUser2);
+                presenter.Render(expectedUser3);
+                presenter.Render(expectedTweet1);
+                presenter.Render(expectedTweet2);
+                presenter.Render(expectedTweet3);
             });
         }
 
         private static TwitterApp CreateTwitterApp()
         {
-            var logger = CreateLogger();
+            var logger = CreatePresenter();
             return CreateTwitterApp(logger);
         }
 
@@ -167,7 +167,7 @@ namespace TwitterFeed.Tests
             return Path.Combine(testDirectory, "TestData", testFile);
         }
 
-        private static ITweetPresenter CreateLogger()
+        private static ITweetPresenter CreatePresenter()
         {
             return Substitute.For<ITweetPresenter>();
         }
