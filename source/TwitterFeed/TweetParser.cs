@@ -6,9 +6,9 @@ namespace TwitterFeed
 {
     public class TweetParser
     {
-        public List<Tweet> GetTweets(IEnumerable<string> tweetLines)
+        public IEnumerable<Tweet> GetTweets(IEnumerable<string> tweetLines)
         {
-            return tweetLines.Select(CreateTweet).ToList();
+            return tweetLines.Select(CreateTweet);
         }
 
         private Tweet CreateTweet(string tweetLine)
