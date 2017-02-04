@@ -51,14 +51,17 @@ namespace TwitterFeed.Tests
             Assert.AreEqual("Sweet lemonade", tweets[2].Text);
         }
 
-        [Test]
-        public void GetTweets_GivenMalFormedTweetLine_ShouldThrowException()
+        [TestCase("Alex Look at my horse")]
+        [TestCase("Alex> ")]
+        [TestCase("> I'll take you to the universe")]
+        [TestCase("Jim@ I'll take you to the universe")]
+        public void GetTweets_GivenMalFormedTweetLine_ShouldThrowException(string line)
         {
             //---------------Set up test pack-------------------
-            var lines = new List<string> { "Alex Look at my horse" };
+            var lines = new List<string> { line };
             var tweetParser = new TweetParser();
             //---------------Execute Test ----------------------
-            Assert.Throws<ArgumentException>(() => tweetParser.GetTweets(lines));
+            Assert.Throws<ArgumentException>(() => tweetParser.GetTweets(lines).ToList());
         }
     }
 }
