@@ -20,12 +20,12 @@ namespace TwitterFeed
         {
             var userNames = GetUserNames(line);
             var primary = userNames.First();
-            var followees = userNames.Skip(1).ToList();
+            var following = userNames.Skip(1).ToList();
 
             var user = users.FirstOrDefault(u => u.Name == primary) ?? CreateNewUser(primary);
             AddUser(users, user);
 
-            followees.ForEach(f =>
+            following.ForEach(f =>
             {
                 var followee = users.FirstOrDefault(u => u.Name == f) ?? CreateNewUser(f);
                 AddUser(user.Following, followee);
@@ -33,13 +33,13 @@ namespace TwitterFeed
             });
         }
 
-        private static IEnumerable<string> GetUserNames(string input)
+        private IEnumerable<string> GetUserNames(string input)
         {
             return input.Split(new[] {"follows", ","}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Trim());
         }
 
-        private static void AddUser(List<User> users, User user)
+        private void AddUser(List<User> users, User user)
         {
             if (users.Any(u => u.Name == user.Name)) return;
             users.Add(user);

@@ -61,9 +61,10 @@ namespace TwitterFeed.Tests
             var users = userParser.GetUsers(lines);
             //---------------Test Result -----------------------
             var john = users.FirstOrDefault(user => user.Name == "John");
+            var userNames = john.Following.Select(user => user.Name);
 
             Assert.AreEqual(4, users.Count);
-            CollectionAssert.AreEquivalent(new [] {"Bill", "Tim", "Ed"}, john.Following.Select(user => user.Name));
+            CollectionAssert.AreEquivalent(new [] {"Bill", "Tim", "Ed"}, userNames);
         }
     }
 }

@@ -32,21 +32,7 @@ namespace TwitterFeed
 
             var tweetLines = File.ReadLines(filePaths[1]);
             var tweets = _tweetParser.GetTweets(tweetLines);
-
-            //var userTweets = users.OrderBy(user => user.Name)
-            //    .Join(tweets, user => user.Name, tweet => tweet.Author, (user, tweet) => new {User = user, Tweet = tweet})
-            //    .GroupBy(user => user.User, user => user.Tweet);
-
-            //foreach (var userTweet in userTweets)
-            //{
-            //    _tweetPresenter.Render(userTweet.Key.Name);
-            //    foreach (var tweet in userTweet)
-            //    {
-            //        _tweetPresenter.Render(FormatTweet(tweet));
-            //    }
-
-            //}
-
+            
             users.OrderBy(user => user.Name).ToList().ForEach(u =>
             {
                 _tweetPresenter.Render(u.Name);
