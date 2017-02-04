@@ -33,31 +33,31 @@ namespace TwitterFeed
             var tweetLines = File.ReadLines(filePaths[1]);
             var tweets = _tweetParser.GetTweets(tweetLines);
 
-            var userTweets = users.OrderBy(user => user.Name)
-                .Join(tweets, user => user.Name, tweet => tweet.Author, (user, tweet) => new {User = user, Tweet = tweet})
-                .GroupBy(u => u.User, u => u.Tweet);
+            //var userTweets = users.OrderBy(user => user.Name)
+            //    .Join(tweets, user => user.Name, tweet => tweet.Author, (user, tweet) => new {User = user, Tweet = tweet})
+            //    .GroupBy(user => user.User, user => user.Tweet);
 
-            foreach (var userTweet in userTweets)
-            {
-                _tweetPresenter.Render(userTweet.Key.Name);
-                foreach (var tweet in userTweet)
-                {
-                    _tweetPresenter.Render(FormatTweet(tweet));
-                }
-
-            }
-
-            //users.OrderBy(user => user.Name).ToList().ForEach(u =>
+            //foreach (var userTweet in userTweets)
             //{
-            //    _tweetPresenter.Render(u.Name);
-            //    tweets.Where(ShouldShowTweet(u)).ToList()
-            //        .ForEach(t => _tweetPresenter.Render(FormatTweet(t)));
-            //});
+            //    _tweetPresenter.Render(userTweet.Key.Name);
+            //    foreach (var tweet in userTweet)
+            //    {
+            //        _tweetPresenter.Render(FormatTweet(tweet));
+            //    }
+
+            //}
+
+            users.OrderBy(user => user.Name).ToList().ForEach(u =>
+            {
+                _tweetPresenter.Render(u.Name);
+                tweets.Where(ShouldShowTweet(u)).ToList()
+                    .ForEach(t => _tweetPresenter.Render(FormatTweet(t)));
+            });
         }
 
-        private Func<Tweet, bool> ShouldShowTweet(User u)
+        private Func<Tweet, bool> ShouldShowTweet(User user)
         {
-            return t =>TweetIsForUser(t, u) || u.Following.Any(f => TweetIsForUser(t, f));
+            return t =>TweetIsForUser(t, user) || user.Following.Any(f => TweetIsForUser(t, f));
         }
 
         private string FormatTweet(Tweet tweet)
