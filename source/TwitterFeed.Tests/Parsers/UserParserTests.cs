@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using TwitterFeed.Parsers;
 
-namespace TwitterFeed.Tests
+namespace TwitterFeed.Tests.Parsers
 {
     [TestFixture]
     public class UserParserTests

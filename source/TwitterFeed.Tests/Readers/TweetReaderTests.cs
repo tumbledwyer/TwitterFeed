@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using TwitterFeed.Readers;
 
-namespace TwitterFeed.Tests
+namespace TwitterFeed.Tests.Readers
 {
     [TestFixture]
     public class TweetReaderTests
