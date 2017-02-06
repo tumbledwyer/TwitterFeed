@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TwitterFeed.Entities;
 
-namespace TwitterFeed
+namespace TwitterFeed.Parsers
 {
     public class UserParser
     {

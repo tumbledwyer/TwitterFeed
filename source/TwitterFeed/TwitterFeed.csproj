@@ -47,13 +47,13 @@
     <Compile Include="Output\ITweetPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tweet.cs" />
-    <Compile Include="TweetParser.cs" />
-    <Compile Include="TweetReader.cs" />
+    <Compile Include="Entities\Tweet.cs" />
+    <Compile Include="Parsers\TweetParser.cs" />
+    <Compile Include="Readers\TweetReader.cs" />
     <Compile Include="TwitterApp.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="UserParser.cs" />
-    <Compile Include="UserReader.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Parsers\UserParser.cs" />
+    <Compile Include="Readers\UserReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

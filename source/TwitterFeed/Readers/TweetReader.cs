@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TwitterFeed.Entities;
+using TwitterFeed.Parsers;
 
-namespace TwitterFeed
+namespace TwitterFeed.Readers
 {
     public class TweetReader
     {

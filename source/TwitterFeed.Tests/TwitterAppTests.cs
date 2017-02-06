@@ -4,6 +4,7 @@ using System.IO;
 using NSubstitute;
 using NUnit.Framework;
 using TwitterFeed.Output;
+using TwitterFeed.Tests.TestUtils;
 
 namespace TwitterFeed.Tests
 {
@@ -34,8 +35,8 @@ namespace TwitterFeed.Tests
         public void Run_GivenOneUserAndZeroTweets_ShouldRenderName()
         {
             //---------------Set up test pack-------------------
-            var userFile = GetTestFile("OneUser.txt");
-            var tweetFile = GetTestFile("EmptyTweets.txt");
+            var userFile = FileUtils.GetTestFile("OneUser.txt");
+            var tweetFile = FileUtils.GetTestFile("EmptyTweets.txt");
             var expected = "Steve";
 
             var presenter = CreatePresenter();
@@ -51,8 +52,8 @@ namespace TwitterFeed.Tests
         public void Run_GivenOneUserAndOneTweet_ShouldRenderNameAndTweet()
         {
             //---------------Set up test pack-------------------
-            var userFile = GetTestFile("OneUser.txt");
-            var tweetFile = GetTestFile("OneTweet.txt");
+            var userFile = FileUtils.GetTestFile("OneUser.txt");
+            var tweetFile = FileUtils.GetTestFile("OneTweet.txt");
             var expectedUser = "Steve";
             var expectedTweet = "\t@Steve: I have a twitter account";
 
@@ -73,8 +74,8 @@ namespace TwitterFeed.Tests
         public void Run_GivenTwoUsersAndOneTweet_ShouldRenderUsersAlphabeticallyAndTweetWithCorrectUser()
         {
             //---------------Set up test pack-------------------
-            var userFile = GetTestFile("TwoUsers.txt");
-            var tweetFile = GetTestFile("OneTweet.txt");
+            var userFile = FileUtils.GetTestFile("TwoUsers.txt");
+            var tweetFile = FileUtils.GetTestFile("OneTweet.txt");
             var expectedUser1 = "Steve";
             var expectedUser2 = "Xander";
             var expectedTweet = "\t@Steve: I have a twitter account";
@@ -97,8 +98,8 @@ namespace TwitterFeed.Tests
         public void Run_GivenOneTweetAndAUserWithAFollower_ShouldRenderTweetForBothUsers()
         {
             //---------------Set up test pack-------------------
-            var userFile = GetTestFile("TwoUsersWithFollower.txt");
-            var tweetFile = GetTestFile("OneTweet.txt");
+            var userFile = FileUtils.GetTestFile("TwoUsersWithFollower.txt");
+            var tweetFile = FileUtils.GetTestFile("OneTweet.txt");
             var expectedUser1 = "Steve";
             var expectedUser2 = "Xander";
             var expectedTweet = "\t@Steve: I have a twitter account";
@@ -122,8 +123,8 @@ namespace TwitterFeed.Tests
         public void Run_GivenMultipleTweetsAndFollowers_ShouldRenderAllInOrder()
         {
             //---------------Set up test pack-------------------
-            var userFile = GetTestFile("SampleUsers.txt");
-            var tweetFile = GetTestFile("SampleTweets.txt");
+            var userFile = FileUtils.GetTestFile("SampleUsers.txt");
+            var tweetFile = FileUtils.GetTestFile("SampleTweets.txt");
             var expectedUser1 = "Alan";
             var expectedUser2 = "Martin";
             var expectedUser3 = "Ward";
@@ -159,12 +160,6 @@ namespace TwitterFeed.Tests
         private static TwitterApp CreateTwitterApp(ITweetPresenter tweetPresenter)
         {
             return new TwitterApp(tweetPresenter);
-        }
-
-        private static string GetTestFile(string testFile)
-        {
-            var testDirectory = TestContext.CurrentContext.TestDirectory;
-            return Path.Combine(testDirectory, "TestData", testFile);
         }
 
         private static ITweetPresenter CreatePresenter()

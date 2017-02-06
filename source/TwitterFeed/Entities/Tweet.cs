@@ -1,4 +1,4 @@
-﻿namespace TwitterFeed
+﻿namespace TwitterFeed.Entities
 {
     public class Tweet
     {

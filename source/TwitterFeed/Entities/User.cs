@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TwitterFeed
+namespace TwitterFeed.Entities
 {
     public class User
     {

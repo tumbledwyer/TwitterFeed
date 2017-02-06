@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using TwitterFeed.Entities;
 using TwitterFeed.Output;
+using TwitterFeed.Readers;
 
 namespace TwitterFeed
 {
@@ -25,7 +27,6 @@ namespace TwitterFeed
             }
 
             var users = _userReader.ReadUsers(filePaths[0]);
-
             var tweets = _tweetReader.ReadTweets(filePaths[1]);
 
             users.OrderBy(user => user.Name).ToList().ForEach(u =>
