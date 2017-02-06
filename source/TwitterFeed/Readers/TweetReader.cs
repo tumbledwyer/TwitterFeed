@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TwitterFeed.Entities;
 using TwitterFeed.Parsers;
 
@@ -8,11 +9,11 @@ namespace TwitterFeed.Readers
 {
     public class TweetReader
     {
-        private readonly TweetParser _tweetParser;
+        private readonly ITweetParser _tweetParser;
 
-        public TweetReader()
+        public TweetReader(ITweetParser tweetParser)
         {
-            _tweetParser = new TweetParser();
+            _tweetParser = tweetParser;
         }
 
         public IEnumerable<Tweet> ReadTweets(string filePath)
@@ -22,8 +23,8 @@ namespace TwitterFeed.Readers
                 throw new Exception("Invalid file name");
             }
 
-            var tweetLines = File.ReadLines(filePath);
-            return _tweetParser.GetTweets(tweetLines);
+            return File.ReadLines(filePath)
+                .Select(_tweetParser.ParseTweet);
         }
     }
 }

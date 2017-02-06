@@ -2,6 +2,7 @@
 using System.Linq;
 using TwitterFeed.Entities;
 using TwitterFeed.Output;
+using TwitterFeed.Parsers;
 using TwitterFeed.Readers;
 
 namespace TwitterFeed
@@ -16,7 +17,7 @@ namespace TwitterFeed
         {
             _tweetPresenter = tweetPresenter;
             _userReader = new UserReader();
-            _tweetReader = new TweetReader();
+            _tweetReader = new TweetReader(new TweetParser());
         }
 
         public void Run(params string[] filePaths)

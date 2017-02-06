@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using TwitterFeed.Entities;
 
 namespace TwitterFeed.Parsers
 {
-    public class TweetParser
+    public class TweetParser : ITweetParser
     {
-        public IEnumerable<Tweet> GetTweets(IEnumerable<string> tweetLines)
-        {
-            return tweetLines.Select(ParseTweet);
-        }
-
         public Tweet ParseTweet(string tweetLine)
         {
             var parts = GetTweetParts(tweetLine);
