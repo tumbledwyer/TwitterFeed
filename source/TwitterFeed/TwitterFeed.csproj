@@ -49,9 +49,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tweet.cs" />
     <Compile Include="TweetParser.cs" />
+    <Compile Include="TweetReader.cs" />
     <Compile Include="TwitterApp.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserParser.cs" />
+    <Compile Include="UserReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using TwitterFeed.Output;
 
@@ -10,14 +7,14 @@ namespace TwitterFeed
     public class TwitterApp
     {
         private readonly ITweetPresenter _tweetPresenter;
-        private readonly UserParser _userParser;
-        private readonly TweetParser _tweetParser;
+        private readonly UserReader _userReader;
+        private readonly TweetReader _tweetReader;
 
         public TwitterApp(ITweetPresenter tweetPresenter)
         {
             _tweetPresenter = tweetPresenter;
-            _userParser = new UserParser();
-            _tweetParser = new TweetParser();
+            _userReader = new UserReader();
+            _tweetReader = new TweetReader();
         }
 
         public void Run(params string[] filePaths)
@@ -27,12 +24,10 @@ namespace TwitterFeed
                 throw new ArgumentException("Method requires 2 file paths");
             }
 
-            var userLines = File.ReadLines(filePaths[0]).ToList();
-            var users = _userParser.GetUsers(userLines);
+            var users = _userReader.ReadUsers(filePaths[0]);
 
-            var tweetLines = File.ReadLines(filePaths[1]);
-            var tweets = _tweetParser.GetTweets(tweetLines);
-            
+            var tweets = _tweetReader.ReadTweets(filePaths[1]);
+
             users.OrderBy(user => user.Name).ToList().ForEach(u =>
             {
                 _tweetPresenter.Render(u.Name);
