@@ -41,24 +41,7 @@ namespace TwitterFeed.Tests.Readers
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedTweet, tweets.First());
         }
-
-        //[Test]
-        //public void GetTweets_GivenMultipleWellFormedTweetLines_ShouldReturnTweets()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    var lines = new List<string> { "Alex> Look at my horse", "Jim> My horse is amazing", "Alex> Sweet lemonade" };
-        //    var tweetParser = new TweetParser();
-        //    //---------------Execute Test ----------------------
-        //    var tweets = tweetParser.GetTweets(lines).ToList();
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual("Alex", tweets[0].Author);
-        //    Assert.AreEqual("Look at my horse", tweets[0].Text);
-        //    Assert.AreEqual("Jim", tweets[1].Author);
-        //    Assert.AreEqual("My horse is amazing", tweets[1].Text);
-        //    Assert.AreEqual("Alex", tweets[2].Author);
-        //    Assert.AreEqual("Sweet lemonade", tweets[2].Text);
-        //}
-
+        
         private ITweetParser CreateTweetParser(string inputTweet, Tweet expectedTweet)
         {
             var tweetParser = Substitute.For<ITweetParser>();

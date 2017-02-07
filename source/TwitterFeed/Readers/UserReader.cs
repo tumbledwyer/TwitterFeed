@@ -9,11 +9,11 @@ namespace TwitterFeed.Readers
 {
     public class UserReader
     {
-        private readonly UserParser _userParser;
+        private readonly IUserParser _userParser;
 
-        public UserReader()
+        public UserReader(IUserParser userParser)
         {
-            _userParser = new UserParser();
+            _userParser = userParser;
         }
 
         public IEnumerable<User> ReadUsers(string filePath)

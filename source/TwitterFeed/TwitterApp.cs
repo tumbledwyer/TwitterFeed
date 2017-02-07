@@ -16,7 +16,7 @@ namespace TwitterFeed
         public TwitterApp(ITweetPresenter tweetPresenter)
         {
             _tweetPresenter = tweetPresenter;
-            _userReader = new UserReader();
+            _userReader = new UserReader(new UserParser());
             _tweetReader = new TweetReader(new TweetParser());
         }
 

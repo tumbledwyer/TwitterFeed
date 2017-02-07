@@ -5,7 +5,7 @@ using TwitterFeed.Entities;
 
 namespace TwitterFeed.Parsers
 {
-    public class UserParser
+    public class UserParser : IUserParser
     {
         public List<User> GetUsers(List<string> userLines)
         {
@@ -40,7 +40,7 @@ namespace TwitterFeed.Parsers
                 .Select(s => s.Trim());
         }
 
-        private void AddUser(List<User> users, User user)
+        private void AddUser(ICollection<User> users, User user)
         {
             if (users.Any(u => u.Name == user.Name)) return;
             users.Add(user);

@@ -46,6 +46,7 @@
     <Compile Include="Output\ConsoleTweetPresenter.cs" />
     <Compile Include="Output\ITweetPresenter.cs" />
     <Compile Include="Parsers\ITweetParser.cs" />
+    <Compile Include="Parsers\IUserParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Tweet.cs" />
