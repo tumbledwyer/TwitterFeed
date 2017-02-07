@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TwitterFeed.Entities;
 using TwitterFeed.Output;
 using TwitterFeed.Readers;
 
-namespace TwitterFeed
+namespace TwitterFeed.App
 {
     public class TwitterApp
     {
@@ -21,20 +22,24 @@ namespace TwitterFeed
 
         public void Run(params string[] filePaths)
         {
-            if (filePaths.Length != 2)
-            {
-                throw new ArgumentException("Method requires 2 file paths");
-            }
+            CheckArguments(filePaths);
 
             var users = _userReader.ReadUsers(filePaths[0]);
             var tweets = _tweetReader.ReadTweets(filePaths[1]);
 
-            users.OrderBy(user => user.Name).ToList().ForEach(u =>
+            RenderTweets(users, tweets);
+        }
+
+        private void RenderTweets(IEnumerable<User> users, IEnumerable<Tweet> tweets)
+        {
+            foreach (var user in users.OrderBy(user => user.Name))
             {
-                _tweetPresenter.Render(u);
-                tweets.Where(ShouldShowTweet(u)).ToList()
-                    .ForEach(t => _tweetPresenter.Render(t));
-            });
+                _tweetPresenter.Render(user);
+                foreach (var tweet in tweets.Where(ShouldShowTweet(user)))
+                {
+                    _tweetPresenter.Render(tweet);
+                }
+            }
         }
 
         private Func<Tweet, bool> ShouldShowTweet(User user)
@@ -45,6 +50,14 @@ namespace TwitterFeed
         private bool TweetIsForUser(Tweet tweet, User user)
         {
             return tweet.Author == user.Name;
+        }
+
+        private void CheckArguments(string[] filePaths)
+        {
+            if (filePaths.Length != 2)
+            {
+                throw new ArgumentException("Method requires 2 file paths");
+            }
         }
     }
 }

@@ -65,8 +65,8 @@
     <Compile Include="TestUtils\FileUtils.cs" />
     <Compile Include="Parsers\TweetParserTests.cs" />
     <Compile Include="Readers\TweetReaderTests.cs" />
-    <Compile Include="TwitterAppIntegrationTests.cs" />
-    <Compile Include="TwitterAppTests.cs" />
+    <Compile Include="App\TwitterAppIntegrationTests.cs" />
+    <Compile Include="App\TwitterAppTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parsers\UserParserTests.cs" />
   </ItemGroup>

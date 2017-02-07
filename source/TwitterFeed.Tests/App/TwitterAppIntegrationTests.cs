@@ -1,16 +1,17 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using TwitterFeed.App;
 using TwitterFeed.Output;
 using TwitterFeed.Parsers;
 using TwitterFeed.Readers;
 using TwitterFeed.Tests.TestUtils;
 
-namespace TwitterFeed.Tests
+namespace TwitterFeed.Tests.App
 {
     public class TwitterAppIntegrationTests
     {
-       [Category("Integration")]
+        [Category("Integration")]
         [Test]
         public void Run_GivenOneUserAndZeroTweets_ShouldRenderName()
         {
@@ -125,7 +126,8 @@ namespace TwitterFeed.Tests
 
         private TwitterApp CreateTwitterApp()
         {
-            return new TwitterApp(new ConsoleTweetPresenter(), new TweetReader(new TweetParser()), new UserReader(new UserParser()));
+            return new TwitterApp(new ConsoleTweetPresenter(), new TweetReader(new TweetParser()),
+                new UserReader(new UserParser()));
         }
     }
 }

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
+using TwitterFeed.App;
 using TwitterFeed.Entities;
 using TwitterFeed.Output;
 using TwitterFeed.Readers;
 using TwitterFeed.Tests.TestUtils;
 
-namespace TwitterFeed.Tests
+namespace TwitterFeed.Tests.App
 {
     [TestFixture]
     public class TwitterAppTests
