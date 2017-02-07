@@ -2,7 +2,6 @@
 using System.Linq;
 using TwitterFeed.Entities;
 using TwitterFeed.Output;
-using TwitterFeed.Parsers;
 using TwitterFeed.Readers;
 
 namespace TwitterFeed
@@ -10,14 +9,14 @@ namespace TwitterFeed
     public class TwitterApp
     {
         private readonly ITweetPresenter _tweetPresenter;
-        private readonly UserReader _userReader;
-        private readonly TweetReader _tweetReader;
+        private readonly IUserReader _userReader;
+        private readonly ITweetReader _tweetReader;
 
-        public TwitterApp(ITweetPresenter tweetPresenter)
+        public TwitterApp(ITweetPresenter tweetPresenter, ITweetReader tweetReader, IUserReader userReader)
         {
             _tweetPresenter = tweetPresenter;
-            _userReader = new UserReader(new UserParser());
-            _tweetReader = new TweetReader(new TweetParser());
+            _tweetReader = tweetReader;
+            _userReader = userReader;
         }
 
         public void Run(params string[] filePaths)
@@ -32,20 +31,15 @@ namespace TwitterFeed
 
             users.OrderBy(user => user.Name).ToList().ForEach(u =>
             {
-                _tweetPresenter.Render(u.Name);
+                _tweetPresenter.Render(u);
                 tweets.Where(ShouldShowTweet(u)).ToList()
-                    .ForEach(t => _tweetPresenter.Render(FormatTweet(t)));
+                    .ForEach(t => _tweetPresenter.Render(t));
             });
         }
 
         private Func<Tweet, bool> ShouldShowTweet(User user)
         {
             return t =>TweetIsForUser(t, user) || user.Following.Any(f => TweetIsForUser(t, f));
-        }
-
-        private string FormatTweet(Tweet tweet)
-        {
-            return $"\t@{tweet.Author}: {tweet.Text}";
         }
 
         private bool TweetIsForUser(Tweet tweet, User user)

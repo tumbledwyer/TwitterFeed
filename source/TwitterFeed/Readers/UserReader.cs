@@ -7,7 +7,7 @@ using TwitterFeed.Parsers;
 
 namespace TwitterFeed.Readers
 {
-    public class UserReader
+    public class UserReader : IUserReader
     {
         private readonly IUserParser _userParser;
 

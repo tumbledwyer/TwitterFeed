@@ -1,5 +1,7 @@
 ﻿using System;
 using TwitterFeed.Output;
+using TwitterFeed.Parsers;
+using TwitterFeed.Readers;
 
 namespace TwitterFeed
 {
@@ -9,7 +11,7 @@ namespace TwitterFeed
         {
             try
             {
-                var twitterApp = new TwitterApp(new ConsoleTweetPresenter());
+                var twitterApp = CreateTwitterApp();
                 twitterApp.Run(args);
             }
             catch (Exception exception)
@@ -20,6 +22,11 @@ namespace TwitterFeed
             {
                 Console.ReadLine();
             }
+        }
+
+        private static TwitterApp CreateTwitterApp()
+        {
+            return new TwitterApp(new ConsoleTweetPresenter(), new TweetReader(new TweetParser()), new UserReader(new UserParser()));
         }
     }
 }

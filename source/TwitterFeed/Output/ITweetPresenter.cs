@@ -1,7 +1,10 @@
-﻿namespace TwitterFeed.Output
+﻿using TwitterFeed.Entities;
+
+namespace TwitterFeed.Output
 {
     public interface ITweetPresenter
     {
-        void Render(string message);
+        void Render(User user);
+        void Render(Tweet tweet);
     }
 }

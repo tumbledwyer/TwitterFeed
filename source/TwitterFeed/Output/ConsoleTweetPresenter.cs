@@ -5,11 +5,6 @@ namespace TwitterFeed.Output
 {
     public class ConsoleTweetPresenter : ITweetPresenter
     {
-        public void Render(string message)
-        {
-            Console.WriteLine(message);
-        }
-
         public void Render(User user)
         {
             Console.WriteLine(user.Name);

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
+using PeanutButter.RandomGenerators;
+using TwitterFeed.Entities;
 using TwitterFeed.Output;
+using TwitterFeed.Readers;
 using TwitterFeed.Tests.TestUtils;
 
 namespace TwitterFeed.Tests
@@ -9,7 +13,7 @@ namespace TwitterFeed.Tests
     [TestFixture]
     public class TwitterAppTests
     {
-        [Test]
+       [Test]
         public void Run_GivenEmptyList_ShouldThrowException()
         {
             //---------------Set up test pack-------------------
@@ -30,139 +34,89 @@ namespace TwitterFeed.Tests
         }
 
         [Test]
-        public void Run_GivenOneUserAndZeroTweets_ShouldRenderName()
-        {
-            //---------------Set up test pack-------------------
-            var userFile = FileUtils.GetTestFile("OneUser.txt");
-            var tweetFile = FileUtils.GetTestFile("EmptyTweets.txt");
-            var expected = "Steve";
-
-            var presenter = CreatePresenter();
-
-            var twitterApp = CreateTwitterApp(presenter);
-            //---------------Execute Test ----------------------
-            twitterApp.Run(userFile, tweetFile);
-            //---------------Test Result -----------------------
-            presenter.Received(1).Render(expected);
-        }
-
-        [Test]
-        public void Run_GivenOneUserAndOneTweet_ShouldRenderNameAndTweet()
-        {
-            //---------------Set up test pack-------------------
-            var userFile = FileUtils.GetTestFile("OneUser.txt");
-            var tweetFile = FileUtils.GetTestFile("OneTweet.txt");
-            var expectedUser = "Steve";
-            var expectedTweet = "\t@Steve: I have a twitter account";
-
-            var presenter = CreatePresenter();
-
-            var twitterApp = CreateTwitterApp(presenter);
-            //---------------Execute Test ----------------------
-            twitterApp.Run(userFile, tweetFile);
-            //---------------Test Result -----------------------
-            Received.InOrder(() =>
-            {
-                presenter.Render(expectedUser);
-                presenter.Render(expectedTweet);
-            });
-        }
-
-        [Test]
-        public void Run_GivenTwoUsersAndOneTweet_ShouldRenderUsersAlphabeticallyAndTweetWithCorrectUser()
-        {
-            //---------------Set up test pack-------------------
-            var userFile = FileUtils.GetTestFile("TwoUsers.txt");
-            var tweetFile = FileUtils.GetTestFile("OneTweet.txt");
-            var expectedUser1 = "Steve";
-            var expectedUser2 = "Xander";
-            var expectedTweet = "\t@Steve: I have a twitter account";
-
-            var presenter = CreatePresenter();
-
-            var twitterApp = CreateTwitterApp(presenter);
-            //---------------Execute Test ----------------------
-            twitterApp.Run(userFile, tweetFile);
-            //---------------Test Result -----------------------
-            Received.InOrder(() =>
-            {
-                presenter.Render(expectedUser1);
-                presenter.Render(expectedTweet);
-                presenter.Render(expectedUser2);
-            });
-        }
-
-        [Test]
-        public void Run_GivenOneTweetAndAUserWithAFollower_ShouldRenderTweetForBothUsers()
-        {
-            //---------------Set up test pack-------------------
-            var userFile = FileUtils.GetTestFile("TwoUsersWithFollower.txt");
-            var tweetFile = FileUtils.GetTestFile("OneTweet.txt");
-            var expectedUser1 = "Steve";
-            var expectedUser2 = "Xander";
-            var expectedTweet = "\t@Steve: I have a twitter account";
-
-            var presenter = CreatePresenter();
-
-            var twitterApp = CreateTwitterApp(presenter);
-            //---------------Execute Test ----------------------
-            twitterApp.Run(userFile, tweetFile);
-            //---------------Test Result -----------------------
-            Received.InOrder(() =>
-            {
-                presenter.Render(expectedUser1);
-                presenter.Render(expectedTweet);
-                presenter.Render(expectedUser2);
-                presenter.Render(expectedTweet);
-            });
-        }
-
-        [Test]
-        public void Run_GivenMultipleTweetsAndFollowers_ShouldRenderAllInOrder()
+        public void Run_GivenMultipleTweetsAndFollowers_ShouldRenderUsersAlphabeticallyAndTweetsChronologically()
         {
             //---------------Set up test pack-------------------
             var userFile = FileUtils.GetTestFile("SampleUsers.txt");
             var tweetFile = FileUtils.GetTestFile("SampleTweets.txt");
-            var expectedUser1 = "Alan";
-            var expectedUser2 = "Martin";
-            var expectedUser3 = "Ward";
-            var expectedTweet1 = "\t@Alan: If you have a procedure with 10 parameters, you probably missed some.";
-            var expectedTweet2 = "\t@Ward: There are only two hard things in Computer Science: cache invalidation, naming things and off-by-1 errors.";
-            var expectedTweet3 = "\t@Alan: Random numbers should not be generated with a method chosen at random.";
 
+            var jim = CreateUser("Jim");
+            var zoe = CreateUser("Zoe");
+            var bob = CreateUser("Bob");
+
+            jim.Following.Add(zoe);
+            zoe.Following.Add(bob);
+            zoe.Following.Add(jim);
+
+            var tweet1 = CreateTweet("Jim", RandomValueGen.GetRandomString(0, 140));
+            var tweet2 = CreateTweet("Bob", RandomValueGen.GetRandomString(0, 140));
+            var tweet3 = CreateTweet("Zoe", RandomValueGen.GetRandomString(0, 140));
+            var tweet4 = CreateTweet("Zoe", RandomValueGen.GetRandomString(0, 140));
+
+            var tweetReader = CreateTweetReader();
+            tweetReader.ReadTweets(tweetFile).Returns(new List<Tweet> {tweet1, tweet2, tweet3, tweet4});
+
+            var userReader = CreateUserReader();
+            userReader.ReadUsers(userFile).Returns(new List<User> {jim, zoe, bob});
+            
             var presenter = CreatePresenter();
 
-            var twitterApp = CreateTwitterApp(presenter);
+            var twitterApp = CreateTwitterApp(presenter, tweetReader, userReader);
             //---------------Execute Test ----------------------
             twitterApp.Run(userFile, tweetFile);
             //---------------Test Result -----------------------
             Received.InOrder(() =>
             {
-                presenter.Render(expectedUser1);
-                presenter.Render(expectedTweet1);
-                presenter.Render(expectedTweet3);
-                presenter.Render(expectedUser2);
-                presenter.Render(expectedUser3);
-                presenter.Render(expectedTweet1);
-                presenter.Render(expectedTweet2);
-                presenter.Render(expectedTweet3);
+                presenter.Render(bob);
+                presenter.Render(tweet2);
+                presenter.Render(jim);
+                presenter.Render(tweet1);
+                presenter.Render(tweet3);
+                presenter.Render(tweet4);
+                presenter.Render(zoe);
+                presenter.Render(tweet1);
+                presenter.Render(tweet2);
+                presenter.Render(tweet3);
+                presenter.Render(tweet4);
             });
         }
 
         private TwitterApp CreateTwitterApp()
         {
-            var logger = CreatePresenter();
-            return CreateTwitterApp(logger);
+            var presenter = CreatePresenter();
+            var tweetReader = CreateTweetReader();
+            var userReader = CreateUserReader();
+            return CreateTwitterApp(presenter, tweetReader, userReader);
         }
 
-        private TwitterApp CreateTwitterApp(ITweetPresenter tweetPresenter)
+        private TwitterApp CreateTwitterApp(ITweetPresenter tweetPresenter, ITweetReader tweetReader, IUserReader userReader)
         {
-            return new TwitterApp(tweetPresenter);
+            return new TwitterApp(tweetPresenter, tweetReader, userReader);
+        }
+
+        private static IUserReader CreateUserReader()
+        {
+            return Substitute.For<IUserReader>();
+        }
+
+        private static ITweetReader CreateTweetReader()
+        {
+            return Substitute.For<ITweetReader>();
         }
 
         private ITweetPresenter CreatePresenter()
         {
             return Substitute.For<ITweetPresenter>();
+        }
+
+        private User CreateUser(string name)
+        {
+            return new User {Name = name};
+        }
+
+        private Tweet CreateTweet(string author, string text)
+        {
+            return new Tweet {Author = author, Text = text};
         }
     }
 }

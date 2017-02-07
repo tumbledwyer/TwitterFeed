@@ -8,7 +8,6 @@ namespace TwitterFeed.Tests.Parsers
     [TestFixture]
     public class TweetParserTests
     {
-        
         [Test]
         public void ParseTweet_GivenWellFormedTweetLine_ShouldReturnTweet()
         {
