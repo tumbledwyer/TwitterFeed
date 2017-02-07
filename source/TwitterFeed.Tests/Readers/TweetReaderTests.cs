@@ -2,6 +2,7 @@
 using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
+using PeanutButter.RandomGenerators;
 using TwitterFeed.Entities;
 using TwitterFeed.Parsers;
 using TwitterFeed.Readers;
@@ -58,19 +59,23 @@ namespace TwitterFeed.Tests.Readers
         //    Assert.AreEqual("Sweet lemonade", tweets[2].Text);
         //}
 
-        private static ITweetParser CreateTweetParser(string inputTweet, Tweet expectedTweet)
+        private ITweetParser CreateTweetParser(string inputTweet, Tweet expectedTweet)
         {
             var tweetParser = Substitute.For<ITweetParser>();
             tweetParser.ParseTweet(inputTweet).Returns(expectedTweet);
             return tweetParser;
         }
 
-        private static Tweet CreateTweet()
+        private Tweet CreateTweet()
         {
-            return new Tweet {Author = "RandomAuthor", Text = "Some text"};
+            return new Tweet
+            {
+                Author = RandomValueGen.GetRandomString(),
+                Text = RandomValueGen.GetRandomString()
+            };
         }
 
-        private static TweetReader CreateTweetReader(ITweetParser tweetParser = null)
+        private TweetReader CreateTweetReader(ITweetParser tweetParser = null)
         {
             tweetParser = tweetParser ?? Substitute.For<ITweetParser>();
             return new TweetReader(tweetParser);

@@ -13,7 +13,7 @@ namespace TwitterFeed.Tests.Parsers
         {
             //---------------Set up test pack-------------------
             var lines = new List<string> {"John follows"};
-            var userParser = new UserParser();
+            var userParser = CreateUserParser();
             //---------------Execute Test ----------------------
             var users = userParser.GetUsers(lines);
             //---------------Test Result -----------------------
@@ -26,7 +26,7 @@ namespace TwitterFeed.Tests.Parsers
         {
             //---------------Set up test pack-------------------
             var lines = new List<string> {"John follows", "Bill follows"};
-            var userParser = new UserParser();
+            var userParser = CreateUserParser();
             //---------------Execute Test ----------------------
             var users = userParser.GetUsers(lines);
             //---------------Test Result -----------------------
@@ -40,7 +40,7 @@ namespace TwitterFeed.Tests.Parsers
         {
             //---------------Set up test pack-------------------
             var lines = new List<string> {"John follows Bill", "Bill follows James"};
-            var userParser = new UserParser();
+            var userParser = CreateUserParser();
             //---------------Execute Test ----------------------
             var users = userParser.GetUsers(lines);
             //---------------Test Result -----------------------
@@ -57,7 +57,7 @@ namespace TwitterFeed.Tests.Parsers
         {
             //---------------Set up test pack-------------------
             var lines = new List<string> {"John follows Bill, Tim, Ed"};
-            var userParser = new UserParser();
+            var userParser = CreateUserParser();
             //---------------Execute Test ----------------------
             var users = userParser.GetUsers(lines);
             //---------------Test Result -----------------------
@@ -66,6 +66,11 @@ namespace TwitterFeed.Tests.Parsers
 
             Assert.AreEqual(4, users.Count);
             CollectionAssert.AreEquivalent(new [] {"Bill", "Tim", "Ed"}, userNames);
+        }
+
+        private UserParser CreateUserParser()
+        {
+            return new UserParser();
         }
     }
 }

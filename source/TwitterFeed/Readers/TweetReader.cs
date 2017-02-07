@@ -18,13 +18,18 @@ namespace TwitterFeed.Readers
 
         public IEnumerable<Tweet> ReadTweets(string filePath)
         {
+            CheckFilePath(filePath);
+
+            return File.ReadLines(filePath)
+                .Select(_tweetParser.ParseTweet);
+        }
+
+        private static void CheckFilePath(string filePath)
+        {
             if (!File.Exists(filePath))
             {
                 throw new Exception("Invalid file name");
             }
-
-            return File.ReadLines(filePath)
-                .Select(_tweetParser.ParseTweet);
         }
     }
 }

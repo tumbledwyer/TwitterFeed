@@ -25,7 +25,7 @@ namespace TwitterFeed.Tests.Parsers
         [TestCase("Alex Look at my horse")]
         [TestCase("Alex> ")]
         [TestCase("> I'll take you to the universe")]
-        [TestCase("Jim@ I'll take you to the universe")]
+        [TestCase("Jim@ And all the other places")]
         public void GetTweets_GivenMalFormedTweetLine_ShouldThrowException(string line)
         {
             //---------------Set up test pack-------------------

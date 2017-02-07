@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,8 +18,18 @@ namespace TwitterFeed.Readers
 
         public IEnumerable<User> ReadUsers(string filePath)
         {
+            CheckFilePath(filePath);
+
             var userLines = File.ReadLines(filePath).ToList();
             return _userParser.GetUsers(userLines);
+        }
+
+        private static void CheckFilePath(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                throw new Exception("Invalid file name");
+            }
         }
     }
 }

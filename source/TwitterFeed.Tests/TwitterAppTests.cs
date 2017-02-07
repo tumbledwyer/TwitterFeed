@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using NSubstitute;
 using NUnit.Framework;
 using TwitterFeed.Output;
@@ -151,18 +149,18 @@ namespace TwitterFeed.Tests
             });
         }
 
-        private static TwitterApp CreateTwitterApp()
+        private TwitterApp CreateTwitterApp()
         {
             var logger = CreatePresenter();
             return CreateTwitterApp(logger);
         }
 
-        private static TwitterApp CreateTwitterApp(ITweetPresenter tweetPresenter)
+        private TwitterApp CreateTwitterApp(ITweetPresenter tweetPresenter)
         {
             return new TwitterApp(tweetPresenter);
         }
 
-        private static ITweetPresenter CreatePresenter()
+        private ITweetPresenter CreatePresenter()
         {
             return Substitute.For<ITweetPresenter>();
         }

@@ -38,6 +38,18 @@
       <HintPath>..\packages\NUnit.3.6.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PeanutButter.RandomGenerators, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PeanutButter.RandomGenerators.1.2.137\lib\net45\PeanutButter.RandomGenerators.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PeanutButter.TestUtils.Generic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PeanutButter.TestUtils.Generic.1.2.137\lib\net45\PeanutButter.TestUtils.Generic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PeanutButter.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PeanutButter.Utils.1.2.137\lib\net45\PeanutButter.Utils.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Output\ConsoleTweetPresenterTests.cs" />
+    <Compile Include="Readers\UserReaderTests.cs" />
     <Compile Include="TestUtils\FileUtils.cs" />
     <Compile Include="Parsers\TweetParserTests.cs" />
     <Compile Include="Readers\TweetReaderTests.cs" />
@@ -57,6 +70,7 @@
     <Compile Include="Parsers\UserParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
