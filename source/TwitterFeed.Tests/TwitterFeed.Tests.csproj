@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Output\ConsoleTweetPresenterTests.cs" />
     <Compile Include="TestUtils\FileUtils.cs" />
     <Compile Include="Parsers\TweetParserTests.cs" />
     <Compile Include="Readers\TweetReaderTests.cs" />
